@@ -1,6 +1,6 @@
 import numpy as np
 
-from . import battle
+from . import fuzzy, battle
 import random
 import math
 
@@ -15,8 +15,8 @@ is_running = False
 distance = 0
 level = 1
 exp = 0
-player_maxHealth = 3
-player_attack = 3
+player_maxHealth = 20
+player_attack = 1
 turns = 0
 
 def get_inputs():
@@ -88,10 +88,10 @@ def random_battle_chance():
 
 def create_enemy():
     global distance, player_maxHealth, player_attack
-    enemy_level = math.floor(distance/5) + 1
+    enemy_level = distance // 5 + 1
     enemy_total_stats = enemy_level * 3
-    enemy_health = round((enemy_total_stats/2) + (enemy_total_stats/2 * ((random.randint(-8,8)/32))))
-    enemy_attack = enemy_total_stats - enemy_health
+    enemy_health = enemy_total_stats * 10 * fuzzy()
+    enemy_attack = enemy_total_stats * fuzzy()
     
     battle.start_battle((player_maxHealth, player_attack), (enemy_health, enemy_attack, enemy_level))
 
@@ -99,20 +99,15 @@ def create_enemy():
 
 def level_up():
     global player_maxHealth, player_attack
-    random_number = random.randint(0,1)
-    if(random_number == 0):
-        player_attack += 2
-        player_maxHealth += 1
-    elif(random_number == 1):
-        player_attack += 1
-        player_maxHealth += 2
+    player_attack += 1
+    player_maxHealth += 10
 
 
 def get_rewards(amt):
     global exp
 
     exp += amt
-    if(exp > level * level * 10):
+    if(exp >= level * level * 10):
         level_up()
 
 def game_over():
