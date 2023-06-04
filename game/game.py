@@ -77,7 +77,7 @@ def perform_action_down():
 # other actions
 
 def get_score() -> float:
-    ...
+    return exp
 
 
 
