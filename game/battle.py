@@ -34,8 +34,8 @@ def start_battle(player, enemy):
 
 def perform_action(action):
     {
-        FIGHT: lambda: perform_action_fight(),
-        RUN: lambda: perform_action_run(),
+        FIGHT: perform_action_fight,
+        RUN: perform_action_run,
     }[action]()
 # actions
 
