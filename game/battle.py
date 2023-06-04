@@ -5,7 +5,7 @@ import random
 import math
 
 FIGHT = 'f'
-RUN = 'r'
+RUN = 'q'
 
 enemy_health = 0
 enemy_damage = 0
@@ -49,7 +49,7 @@ def perform_action_fight():
         enemy_turn()
 
 def perform_action_run():
-    if random.randint(0,3) != 0:
+    if random.randint(0,3) == 0: # 25%
         end_battle()
     else:
         enemy_turn()

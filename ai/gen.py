@@ -8,18 +8,18 @@ from game.game import MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
 from game.battle import FIGHT, RUN
 
 
-POPULATION_SIZE = 1000
-SURVIVORS = 50
+POPULATION_SIZE = 500
+SURVIVORS = 100
 assert POPULATION_SIZE // SURVIVORS == POPULATION_SIZE / SURVIVORS
 RATIO = POPULATION_SIZE // SURVIVORS
 NUM_GENERATIONS = 50
-ROUNDS = 3
+ROUNDS = 2
 
 ais: list[Player] = []
 
 
 def mutate(x):
-    MUTATION = .1
+    MUTATION = .2
     return x + np.random.normal(0.0, MUTATION)
 
 
@@ -99,7 +99,10 @@ def print_game(ai):
             action = (FIGHT, RUN)[output]
             print(action, end='')
             game.battle.perform_action(action)
-            if not game.battle.is_running: print()
+            if not game.battle.is_running:
+                print()
+                if action == RUN:
+                    print(game.game.level, game.battle.enemy_lvl)
         else:
             inputs = game.game.get_inputs()
             outputs = ai.game_ai.forward_prop(inputs)

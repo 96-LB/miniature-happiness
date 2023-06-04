@@ -17,7 +17,8 @@ level = 1
 exp = 0
 player_maxHealth = 20
 player_attack = 1
-turns = 0
+turns = 200
+battles = 15
 
 def get_inputs():
     return np.array([distance, level])
@@ -27,7 +28,7 @@ def get_inputs():
 
 def reset_game():
     # resets the game
-    global is_running, distance, level, exp, player_maxHealth, player_attack, turns
+    global is_running, distance, level, exp, player_maxHealth, player_attack, turns, battles
     distance = 0
     level = 1
     exp = 0
@@ -35,7 +36,8 @@ def reset_game():
     player_attack = 1
     battle.end_battle()
     is_running = True
-    turns = 15
+    turns = 200
+    battles = 15
 
 def perform_action(action):
     global turns
@@ -43,7 +45,7 @@ def perform_action(action):
     if battle.is_running:
         raise Exception('You are in a battle!')
     
-    if turns <= 0:
+    if turns <= 0 or battles <= 0:
         game_over()
     else:
         {
@@ -52,17 +54,20 @@ def perform_action(action):
             MOVE_UP: perform_action_up,
             MOVE_DOWN: perform_action_down,
         }[action]()
+        turns -= 1
         random_battle_chance()
         
 
 
 def perform_action_left():
     global distance
+    
     if distance > 0:
-        distance += -1
+        distance -= 1
 
 def perform_action_right():
     global distance
+    
     distance += 1
 
 
@@ -77,8 +82,8 @@ def perform_action_down():
 
 def get_score() -> float:
     
-    if distance // 5 + 1 < level:
-        return (distance // 5 + 1) * (distance // 5 + 1) * 10
+    if distance // 20 + 1 < level:
+        return (distance // 20 + 1) * (distance // 20 + 1) * 10
     return exp
 
 
@@ -90,13 +95,12 @@ def random_battle_chance():
         create_enemy()
 
 def create_enemy():
-    global distance, player_maxHealth, player_attack, turns
-    enemy_level = distance // 5 + 1
+    global distance, player_maxHealth, player_attack, battles
+    enemy_level = distance // 30 + 1
     enemy_health = enemy_level * 10 * fuzzy()
     enemy_attack = enemy_level * fuzzy()
     
     battle.start_battle((player_maxHealth, player_attack), (enemy_health, enemy_attack, enemy_level))
-    turns -= 1
 
 #every 5 distace, enemies get stronger
 
@@ -108,11 +112,13 @@ def level_up():
 
 
 def get_rewards(amt):
-    global exp
+    global exp, battles
 
     exp += amt
     if(exp >= level * level * 10):
         level_up()
+    battles -= 1
+    
 
 def game_over():
     global is_running
