@@ -11,4 +11,4 @@
 # attack
 # run
 
-dims = (4, 6, 2)
+dims = (2, 2)

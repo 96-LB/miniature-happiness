@@ -31,5 +31,5 @@ def perform_action_left():
 
 # other actions
 
-def get_score():
+def get_score() -> float:
     ...

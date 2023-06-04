@@ -1,1 +1,1 @@
-import game, game.battle
+import ai.gen
