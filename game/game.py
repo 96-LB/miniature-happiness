@@ -31,8 +31,8 @@ def reset_game():
     distance = 0
     level = 1
     exp = 0
-    player_maxHealth = 3
-    player_attack = 3
+    player_maxHealth = 20
+    player_attack = 1
     battle.end_battle()
     is_running = True
     turns = 100
@@ -89,9 +89,8 @@ def random_battle_chance():
 def create_enemy():
     global distance, player_maxHealth, player_attack
     enemy_level = distance // 5 + 1
-    enemy_total_stats = enemy_level * 3
-    enemy_health = enemy_total_stats * 10 * fuzzy()
-    enemy_attack = enemy_total_stats * fuzzy()
+    enemy_health = enemy_level * 10 * fuzzy()
+    enemy_attack = enemy_level * fuzzy()
     
     battle.start_battle((player_maxHealth, player_attack), (enemy_health, enemy_attack, enemy_level))
 

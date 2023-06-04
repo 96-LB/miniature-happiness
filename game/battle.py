@@ -25,7 +25,6 @@ def start_battle(player, enemy):
     global player_health, player_damage, enemy_health, enemy_damage, enemy_lvl, is_running
     player_health, player_damage = player
     enemy_health, enemy_damage, enemy_lvl = enemy
-    
     is_running = True
 
 
@@ -66,7 +65,6 @@ def enemy_turn():
 
 def end_battle():
     global is_running
-
     is_running = False
 
     
