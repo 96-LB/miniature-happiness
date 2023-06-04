@@ -5,10 +5,10 @@
 # enemy atk
 
 # hidden layer:
-# six neurons
+# three neurons
 
 # output layer:
 # attack
 # run
 
-dims = (4, 6, 2)
+dims = (4, 3, 2)

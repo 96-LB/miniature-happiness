@@ -1,15 +1,15 @@
 # input layer:
 # x position
-# y position
 # current level
 
 # hidden layer:
 # five neurons
 
+# second hidden layer
+# four neurons
+
 # output layer:
 # move left
 # move right
-# move up
-# move down
 
-dims = (3, 5, 4)
+dims = (2, 5, 4, 2)

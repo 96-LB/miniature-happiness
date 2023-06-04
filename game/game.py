@@ -20,7 +20,7 @@ player_attack = 1
 turns = 0
 
 def get_inputs():
-    return np.array([distance, 0, level])
+    return np.array([distance, level])
 
 
 
@@ -77,12 +77,17 @@ def perform_action_down():
 # other actions
 
 def get_score() -> float:
+    
+    if distance // 5 + 1 < level:
+        return (distance // 5 + 1) * (distance // 5 + 1) * 10
     return exp
+
 
 
 
 def random_battle_chance():
     random_number = random.randint(0, 4)
+    random_number = turns % 4
     if random_number == 0:
         create_enemy()
 
@@ -97,9 +102,10 @@ def create_enemy():
 #every 5 distace, enemies get stronger
 
 def level_up():
-    global player_maxHealth, player_attack
+    global player_maxHealth, player_attack, level
     player_attack += 1
     player_maxHealth += 10
+    level += 1
 
 
 def get_rewards(amt):
