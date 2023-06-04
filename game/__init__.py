@@ -27,7 +27,7 @@ def get_inputs():
 
 def reset_game():
     # resets the game
-    global is_running, distance, level, exp, player_maxHealth, player_attack
+    global is_running, distance, level, exp, player_maxHealth, player_attack, turns
     distance = 0
     level = 1
     exp = 0
@@ -38,6 +38,8 @@ def reset_game():
     turns = 100
 
 def perform_action(action):
+    global turns
+    
     if battle.is_running:
         raise Exception('You are in a battle!')
     

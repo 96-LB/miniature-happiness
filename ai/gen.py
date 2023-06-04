@@ -68,17 +68,12 @@ def play_games():
 
 
 def play_game(ai):
-    import random
-    ai[0] = random.randrange(100)
-
-
-'''def play_game(ai):
     game_ai, battle_ai = ai[1]
     
     game.reset_game()
     
-    while not game.is_game_over:
-        if game.is_battling:
+    while game.is_running:
+        if game.is_running:
             inputs = game.battle.get_inputs()
             outputs = forward_prop(inputs, battle_ai)
             output = np.argmax(outputs)
@@ -91,4 +86,4 @@ def play_game(ai):
             action = (MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN)[output]
             game.perform_action(outputs)
     
-    ai[0] = game.get_score()'''
+    ai[0] = game.get_score()
