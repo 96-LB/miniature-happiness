@@ -2,10 +2,9 @@ import numpy as np
 import ai.game, ai.battle
 import game.game, game.battle
 
-from random import random
-
-from ai.neuralnet import NeuralNet
-from game import MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
+from .neuralnet import NeuralNet
+from .player import Player
+from game.game import MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
 from game.battle import FIGHT, RUN
 
 
@@ -15,7 +14,7 @@ assert POPULATION_SIZE // SURVIVORS == POPULATION_SIZE / SURVIVORS
 RATIO = POPULATION_SIZE // SURVIVORS
 NUM_GENERATIONS = 100
 
-ais: list[list[int, tuple[NeuralNet, NeuralNet]]] = []
+ais: list[Player] = []
 
 
 def mutate(x):
@@ -33,25 +32,25 @@ def run():
 
 def first_generation():
     for i in range(POPULATION_SIZE):
-        ais.append([0, (NeuralNet(ai.game.dims), NeuralNet(ai.battle.dims))])
+        ais.append(Player(NeuralNet(ai.game.dims), NeuralNet(ai.battle.dims), 0))
 
 
 def next_generation():
     play_games()
-    ais.sort(reverse=True, key=lambda x: x[0])
+    ais.sort(reverse=True, key=lambda x: x.score)
     
     for i in range(SURVIVORS):
         for j in range(1, RATIO):
-            reproduce(i, i + SURVIVORS * j)
+            reproduce(ais[i], ais[i + SURVIVORS * j])
 
 
-def reproduce(old, new):
-    old_game_ai, old_battle_ai = ais[old][1]
-    new_game_ai, new_battle_ai = old_game_ai.replicate(), old_battle_ai.replicate()
-    ais[new][1] = (new_game_ai, new_battle_ai)
+def reproduce(old: Player, new: Player):
+    new.game_ai = old.game_ai.replicate()
+    new.battle_ai = old.battle_ai.replicate()
     
-    new_game_ai.mutate(mutate, mutate)
-    new_battle_ai.mutate(mutate, mutate)
+    new.game_ai.mutate(mutate, mutate)
+    new.battle_ai.mutate(mutate, mutate)
+
 
 def play_games():
     for i in range(POPULATION_SIZE):
@@ -59,22 +58,20 @@ def play_games():
 
 
 def play_game(ai):
-    game_ai, battle_ai = ai[1]
-    
     game.game.reset_game()
     
     while game.game.is_running:
         if game.battle.is_running:
             inputs = game.battle.get_inputs()
-            outputs = forward_prop(inputs, battle_ai)
+            outputs = ai.battle_ai.forward_prop(inputs)
             output = np.argmax(outputs)
             action = (FIGHT, RUN)[output]
             game.battle.perform_action(action)
         else:
             inputs = game.game.get_inputs()
-            outputs = forward_prop(inputs, game_ai)
+            outputs = ai.game_ai.forward_prop(inputs)
             output = np.argmax(outputs)
             action = (MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN)[output]
-            game.game.perform_action(outputs)
+            game.game.perform_action(action)
     
-    ai[0] = game.get_score()
+    ai.score = game.game.get_score()
