@@ -58,7 +58,7 @@ def perform_action_run():
 def enemy_turn():
     global player_health
     
-    player_health -= enemy_damage() * fuzzy
+    player_health -= enemy_damage * fuzzy()
     if(player_health <= 0):
         end_battle()
         game.game_over()
