@@ -13,7 +13,7 @@ SURVIVORS = 50
 assert POPULATION_SIZE // SURVIVORS == POPULATION_SIZE / SURVIVORS
 RATIO = POPULATION_SIZE // SURVIVORS
 NUM_GENERATIONS = 50
-ROUNDS = 1
+ROUNDS = 3
 
 ais: list[Player] = []
 
@@ -27,9 +27,11 @@ def run():
     first_generation()
     for i in range(NUM_GENERATIONS):
         next_generation()
+        print()
+        print()
+        print_game(ais[0])
         print(f'GENERATION {i}')
         print(ais[0].score // 1, ais[1].score // 1, ais[10].score // 1, ais[49].score // 1, sum([x.score for x in ais]) / len(ais) // 1)
-        print_game(ais[0])
     return ais
 
 

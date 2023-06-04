@@ -35,7 +35,7 @@ def reset_game():
     player_attack = 1
     battle.end_battle()
     is_running = True
-    turns = 100
+    turns = 15
 
 def perform_action(action):
     global turns
@@ -43,28 +43,27 @@ def perform_action(action):
     if battle.is_running:
         raise Exception('You are in a battle!')
     
-    {
-        MOVE_LEFT: perform_action_left,
-        MOVE_RIGHT: perform_action_right,
-        MOVE_UP: perform_action_up,
-        MOVE_DOWN: perform_action_down,
-    }[action]()
-
-    turns -= 1
     if turns <= 0:
         game_over()
+    else:
+        {
+            MOVE_LEFT: perform_action_left,
+            MOVE_RIGHT: perform_action_right,
+            MOVE_UP: perform_action_up,
+            MOVE_DOWN: perform_action_down,
+        }[action]()
+        random_battle_chance()
+        
 
 
 def perform_action_left():
     global distance
     if distance > 0:
         distance += -1
-        random_battle_chance()
 
 def perform_action_right():
     global distance
     distance += 1
-    random_battle_chance()
 
 
 
@@ -87,17 +86,17 @@ def get_score() -> float:
 
 def random_battle_chance():
     random_number = random.randint(0, 4)
-    random_number = turns % 4
     if random_number == 0:
         create_enemy()
 
 def create_enemy():
-    global distance, player_maxHealth, player_attack
+    global distance, player_maxHealth, player_attack, turns
     enemy_level = distance // 5 + 1
     enemy_health = enemy_level * 10 * fuzzy()
     enemy_attack = enemy_level * fuzzy()
     
     battle.start_battle((player_maxHealth, player_attack), (enemy_health, enemy_attack, enemy_level))
+    turns -= 1
 
 #every 5 distace, enemies get stronger
 

@@ -52,8 +52,7 @@ def perform_action_run():
     if random.randint(0,3) != 0:
         end_battle()
     else:
-        #enemy_turn()
-        end_battle()
+        enemy_turn()
 
 def enemy_turn():
     global player_health
