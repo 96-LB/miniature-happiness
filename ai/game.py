@@ -12,4 +12,4 @@
 # move up
 # move down
 
-dims = (2, 2)
+dims = (3, 5, 4)

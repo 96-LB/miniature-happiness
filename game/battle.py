@@ -1,6 +1,6 @@
 import numpy as np
 
-from . import get_rewards, game_over
+from . import game
 import random
 import math
 
@@ -44,7 +44,7 @@ def perform_action_fight():
 
     enemy_health -= (player_damage + math.floor(((random.randint(-1,1)/4) * player_damage)))
     if(enemy_health <= 0):
-        get_rewards(enemy_lvl * random.randint(3,5))
+        game.get_rewards(enemy_lvl * random.randint(3,5))
         end_battle()
     else:
         enemy_turn()
@@ -61,7 +61,7 @@ def enemy_turn():
     player_health -= (enemy_damage + math.floor(((random.randint(-1,1)/4) * enemy_damage)))
     if(player_health <= 0):
         end_battle()
-        game_over()
+        game.game_over()
 
 
 def end_battle():
@@ -70,4 +70,3 @@ def end_battle():
     is_running = False
 
     
-

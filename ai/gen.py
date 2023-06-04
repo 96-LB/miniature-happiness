@@ -1,11 +1,11 @@
 import numpy as np
 import ai.game, ai.battle
-import game, game.battle
+import game.game, game.battle
 
 from random import random
 
 from . import forward_prop, generate_random
-from game import MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
+from game.game import MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
 from game.battle import FIGHT, RUN
 
 
@@ -21,6 +21,14 @@ ais: list = []
 def mutate():
     MUTATION = 0.05
     return MUTATION * (random() - 0.5)
+
+
+def run():
+    first_generation()
+    for i in range(NUM_GENERATIONS):
+        next_generation()
+        print(i)
+    return ais
 
 
 def first_generation():
@@ -70,20 +78,20 @@ def play_games():
 def play_game(ai):
     game_ai, battle_ai = ai[1]
     
-    game.reset_game()
+    game.game.reset_game()
     
-    while game.is_running:
-        if game.is_running:
+    while game.game.is_running:
+        if game.battle.is_running:
             inputs = game.battle.get_inputs()
             outputs = forward_prop(inputs, battle_ai)
             output = np.argmax(outputs)
             action = (FIGHT, RUN)[output]
             game.battle.perform_action(action)
         else:
-            inputs = game.get_inputs()
+            inputs = game.game.get_inputs()
             outputs = forward_prop(inputs, game_ai)
             output = np.argmax(outputs)
             action = (MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN)[output]
-            game.perform_action(outputs)
+            game.game.perform_action(outputs)
     
-    ai[0] = game.get_score()
+    ai[0] = game.game.get_score()
