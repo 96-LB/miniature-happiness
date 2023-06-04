@@ -3,7 +3,7 @@ import numpy as np
 np.random.seed(1)
 
 def sigmoid(Z):
-	A = 1/(1+np.exp(np.dot(-1, Z)))
+	return 1/(1+np.exp(np.dot(-1, Z)))
 
 class NeuralNet:
     def __init__(self, layer_dims, weights = None, biases = None):
@@ -11,16 +11,16 @@ class NeuralNet:
         self.layer_dims = layer_dims[:]
 
         if weights is None:
-            self.weights = [None] # first layer has no weights
+            self.weights: list = [None] # first layer has no weights
             for layer in range(1, self.L):
-                self.weights.append(np.random.randn(layer_dims[layer - 1], layer_dims[layer])) 
+                self.weights.append(np.random.randn(layer_dims[layer], layer_dims[layer - 1]))
         else:
             self.weights = weights[:]
 
         if biases is None:
-            self.biases = [None] # first layer has no biases
+            self.biases: list = [None] # first layer has no biases
             for layer in range(1, self.L):
-                self.biases.append(np.zeros((layer_dims[layer], 1))) 
+                self.biases.append(np.zeros(layer_dims[layer]))
         else:
             self.biases = biases[:]
 
@@ -33,9 +33,10 @@ class NeuralNet:
 
     def mutate(self, mutate_weights_fn, mutate_biases_fn):
         for layer in range(1, self.L):
-            self.weights[layer] = mutate_weights_fn(self.weights[layer])
-            self.biases[layer] = mutate_biases_fn(self.biases[layer])
-
+            self.weights[layer] = np.vectorize(mutate_weights_fn)(self.weights[layer])
+            self.biases[layer] = np.vectorize(mutate_biases_fn)(self.biases[layer])
+    
+    # NOTE: POTENTIALLY SLOW
     def replicate(self):
         return NeuralNet(self.layer_dims, self.weights, self.biases)
 
