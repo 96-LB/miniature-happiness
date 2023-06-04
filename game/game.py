@@ -45,9 +45,9 @@ def perform_action(action):
     
     {
         MOVE_LEFT: perform_action_left,
-        MOVE_RIGHT: lambda: perform_action_right,
-        MOVE_UP: lambda: perform_action_up,
-        MOVE_DOWN: lambda: perform_action_down,
+        MOVE_RIGHT: perform_action_right,
+        MOVE_UP: perform_action_up,
+        MOVE_DOWN: perform_action_down,
     }[action]()
 
     turns -= 1
