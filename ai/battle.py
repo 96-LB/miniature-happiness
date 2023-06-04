@@ -1,15 +1,14 @@
 # input layer:
-# x position
-# y position
-# current level
+# player hp
+# player atk
+# enemy hp
+# enemy atk
 
 # hidden layer:
-# five neurons
+# six neurons
 
 # output layer:
-# move left
-# move right
-# move up
-# move down
+# attack
+# run
 
-dims = (3, 5, 4)
+dims = (4, 6, 2)
