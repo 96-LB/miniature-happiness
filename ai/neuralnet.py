@@ -13,7 +13,7 @@ class NeuralNet:
         if weights is None:
             self.weights = [None] # first layer has no weights
             for layer in range(1, self.L):
-                self.weights.append(np.random.randn(layer_dims[layer - 1], layer_dims(layer))) 
+                self.weights.append(np.random.randn(layer_dims[layer - 1], layer_dims[layer])) 
         else:
             self.weights = weights[:]
 
@@ -30,3 +30,14 @@ class NeuralNet:
             Z = np.dot(self.weights[layer], A) + self.biases[layer]
             A = sigmoid(Z)
         return A
+
+    def mutate(self, mutate_weights_fn, mutate_biases_fn):
+        for layer in range(1, self.L):
+            self.weights[layer] = mutate_weights_fn(self.weights[layer])
+            self.biases[layer] = mutate_biases_fn(self.biases[layer])
+
+    def replicate(self):
+        return NeuralNet(self.layer_dims, self.weights, self.biases)
+
+    def __repr__(self) -> str:
+        return f'NN(weights={self.weights}, biases={self.biases})'
