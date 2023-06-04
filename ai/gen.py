@@ -1,6 +1,6 @@
 import numpy as np
 import ai.game, ai.battle
-import game, game.battle
+import game.game, game.battle
 
 from random import random
 
@@ -21,6 +21,14 @@ ais: list[list[int, tuple[NeuralNet, NeuralNet]]] = []
 def mutate(x):
     MUTATION = 1.0
     return x + np.random.normal(0.0, MUTATION)
+
+
+def run():
+    first_generation()
+    for i in range(NUM_GENERATIONS):
+        next_generation()
+        print(i)
+    return ais
 
 
 def first_generation():
@@ -51,27 +59,22 @@ def play_games():
 
 
 def play_game(ai):
-    import random
-    ai[0] = random.randrange(100)
-
-
-'''def play_game(ai):
     game_ai, battle_ai = ai[1]
     
-    game.reset_game()
+    game.game.reset_game()
     
-    while not game.is_game_over:
-        if game.is_battling:
+    while game.game.is_running:
+        if game.battle.is_running:
             inputs = game.battle.get_inputs()
             outputs = forward_prop(inputs, battle_ai)
             output = np.argmax(outputs)
             action = (FIGHT, RUN)[output]
             game.battle.perform_action(action)
         else:
-            inputs = game.get_inputs()
+            inputs = game.game.get_inputs()
             outputs = forward_prop(inputs, game_ai)
             output = np.argmax(outputs)
             action = (MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN)[output]
-            game.perform_action(outputs)
+            game.game.perform_action(outputs)
     
-    ai[0] = game.get_score()'''
+    ai[0] = game.get_score()
