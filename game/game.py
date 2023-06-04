@@ -119,8 +119,3 @@ def game_over():
     global is_running
 
     is_running = False
-
-
-
-for i in range(0, 100):
-    perform_action_right()
